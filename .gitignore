@@ -11,3 +11,6 @@ wasm-support/native-lib/build/
 out.wat
 test.wat
 *.zip
+
+# Mac Stuff
+.DS_Store

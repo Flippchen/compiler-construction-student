@@ -1,0 +1,10 @@
+docker run -v .:/cc -ti skogsbaer/compiler-construction-wasm_linux-arm64:latest bash
+
+scripts/check
+
+scripts/run-tests -k 'test_compiler[var'
+
+scripts/zip-solution
+
+source .venv/bin/activate
+pip install -r requirements.txt
