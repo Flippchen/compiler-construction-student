@@ -19,7 +19,6 @@ def compileStmt(s: stmt) -> list[WasmInstr]:
             instrs = compileExp(e)
             instrs.append(WasmInstrVarLocal('set', identToWasmId(x)))
             return instrs
-    raise Exception(f'No match for statement {s}')
 
 def compileExp(e: exp) -> list[WasmInstr]:
     match e:
@@ -44,7 +43,6 @@ def compileExp(e: exp) -> list[WasmInstr]:
             return instrs
         case Name(name):
             return [WasmInstrVarLocal('get', identToWasmId(name))]
-    raise Exception(f'No match for expression {e}')
 
 def identToWasmId(x: ident) -> WasmId:
     return WasmId(f'${x.name}')
@@ -59,9 +57,11 @@ def compileModule(m: mod, cfg: CompilerConfig) -> WasmModule:
     instrs = compileStmts(m.stmts)
     idMain = WasmId('$main')
     locals: list[tuple[WasmId, WasmValtype]] = [(identToWasmId(x), 'i64') for x in vars]
-    return WasmModule(imports=wasmImports(cfg.maxMemSize),
-    exports=[WasmExport("main", WasmExportFunc(idMain))],
-    globals=[],
-    data=[],
-    funcTable=WasmFuncTable([]),
-    funcs=[WasmFunc(idMain, [], None, locals, instrs)])
+    return WasmModule(
+        imports=wasmImports(cfg.maxMemSize),
+        exports=[WasmExport("main", WasmExportFunc(idMain))],
+        globals=[],
+        data=[],
+        funcTable=WasmFuncTable([]),
+        funcs=[WasmFunc(idMain, [], None, locals, instrs)]
+        )
